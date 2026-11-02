@@ -168,7 +168,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData
                 });
 
-                const data = await response.json();
+                let data;
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    data = await response.json();
+                } else {
+                    if (response.status === 502 || response.status === 503) {
+                        showWarning("Server Initializing", "The cloud instance is currently waking up (Render free tier cold start takes ~30-40 seconds). Please wait a moment and click Predict again.");
+                        return;
+                    }
+                    showWarning("Server Notice", `Backend returned status ${response.status}. Please retry in a moment.`);
+                    return;
+                }
+
                 console.log("Prediction Response:", data);
 
                 if (!response.ok || !data.success) {
@@ -182,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error("Diagnosis Error:", error);
-                showWarning("Network or Server Error", "Could not connect to the diagnostic backend. Please check server connection.");
+                showWarning("Connection Notice", "Could not reach the backend server. If using Render free tier, the instance may be waking up. Please wait 30 seconds and try again.");
             } finally {
                 loadingState.style.display = 'none';
                 uploadPreview.style.display = 'block';
