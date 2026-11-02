@@ -1,0 +1,10 @@
+dataset/
+*.zip
+venv/
+__pycache__/
+*.pyc
+.git/
+results/
+prepare_dataset.py
+train_model.py
+test_system.py

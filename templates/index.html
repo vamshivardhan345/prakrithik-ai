@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prakritik AI | Organic Plant Disease Detection & Recommendation System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-brand">
+                <div class="brand-logo-wrapper">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Prakritik AI Logo" class="brand-logo">
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">Prakritik AI</span>
+                    <span class="brand-subtitle">Smart Organic Farming</span>
+                </div>
+            </a>
+            
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="#detection" class="nav-link"><i class="fa-solid fa-leaf"></i> Disease Detection</a></li>
+                <li><a href="#recommendations" class="nav-link"><i class="fa-solid fa-flask-vial"></i> Organic Remedies</a></li>
+                <li><a href="#about" class="nav-link"><i class="fa-solid fa-circle-info"></i> About Project</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- SECTION 1: HOME (Hero & Overview) -->
+    <section class="section hero-section" id="home">
+        <div class="container hero-container">
+            <div class="hero-badge">
+                <i class="fa-solid fa-seedling"></i> AI-Powered Agricultural Intelligence
+            </div>
+            <h1 class="hero-title">Protect Your Crops With <span class="highlight-green">Pure Organic</span> Intelligence</h1>
+            <p class="hero-desc">
+                Identify plant leaf diseases instantly with MobileNetV2 computer vision, and receive verified, safe organic pesticide and biofungicide recommendations backed by agricultural extension guidelines.
+            </p>
+            <div class="hero-actions">
+                <a href="#detection" class="btn btn-primary"><i class="fa-solid fa-camera"></i> Diagnose Leaf Now</a>
+                <a href="#recommendations" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i> Browse Organic Remedies</a>
+            </div>
+
+            <!-- Pillars / Features -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon green"><i class="fa-solid fa-microscope"></i></div>
+                    <h3>MobileNetV2 Vision</h3>
+                    <p>Trained on 54,000+ PlantVillage images across 38 crop disease classes with stratified validation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon emerald"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Verified Organic Remedies</h3>
+                    <p>Integrated organic pesticide database with active bio-agents, IPM sanitation, and safety protocols.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon lime"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h3>Confidence Guardrails</h3>
+                    <p>Rejects low-confidence or non-leaf photos to avoid misleading crop diagnoses.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: DISEASE DETECTION DASHBOARD -->
+    <section class="section detection-section" id="detection">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="subheading">AI Plant Pathology</span>
+                <h2 class="section-title">Plant Disease Detection & Organic Diagnosis</h2>
+                <p class="section-subtitle">Upload a clear photo of an affected crop leaf for instant neural classification and targeted organic management.</p>
+            </div>
+
+            <div class="detection-grid">
+                <!-- Left: Upload & Input Panel -->
+                <div class="card upload-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-cloud-arrow-up text-green"></i> Upload Leaf Image</h3>
+                        <span class="badge badge-info">JPG, PNG, WEBP</span>
+                    </div>
+                    
+                    <div class="upload-zone" id="drop-zone">
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                        
+                        <div class="upload-idle" id="upload-idle">
+                            <div class="upload-icon-circle">
+                                <i class="fa-solid fa-file-arrow-up"></i>
+                            </div>
+                            <h4>Drag & Drop Leaf Photo</h4>
+                            <p>or click to browse from your device</p>
+                            <button type="button" class="btn btn-outline" id="browse-btn">
+                                <i class="fa-regular fa-folder-open"></i> Choose Image
+                            </button>
+                            <span class="upload-hint"><i class="fa-solid fa-circle-check"></i> Best results with natural lighting & focused leaf</span>
+                        </div>
+
+                        <div class="upload-preview" id="upload-preview" style="display: none;">
+                            <img id="image-preview" src="" alt="Selected leaf preview">
+                            <div class="preview-overlay">
+                                <button type="button" class="btn-remove" id="remove-btn" title="Remove image">
+                                    <i class="fa-solid fa-trash-can"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div class="loading-state" id="loading-state" style="display: none;">
+                            <div class="spinner"></div>
+                            <h4>Analyzing Foliage Features...</h4>
+                            <p>Extracting deep visual representations via MobileNetV2</p>
+                        </div>
+                    </div>
+
+                    <div class="upload-footer">
+                        <button type="button" class="btn btn-primary btn-block" id="predict-btn" disabled>
+                            <i class="fa-solid fa-bolt"></i> Predict Disease & Treatment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Results & Treatment Panel -->
+                <div class="card results-card" id="results-card">
+                    <!-- Default Empty State -->
+                    <div class="results-empty" id="results-empty">
+                        <div class="empty-icon-circle">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3>Diagnosis Results Awaiting</h3>
+                        <p>Upload a plant leaf image on the left and click <strong>Predict Disease</strong> to view the deep learning classification and tailored organic pesticide advice.</p>
+                    </div>
+
+                    <!-- Uncertainty / Error State -->
+                    <div class="alert-box alert-warning" id="results-warning" style="display: none;">
+                        <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="alert-content">
+                            <h4 id="warning-title">Prediction Rejected</h4>
+                            <p id="warning-message">Confidence below reliability threshold.</p>
+                        </div>
+                    </div>
+
+                    <!-- Complete Diagnosis Display -->
+                    <div class="results-content" id="results-content" style="display: none;">
+                        <!-- Primary Diagnosis Header -->
+                        <div class="diagnosis-summary-box">
+                            <div class="diagnosis-left">
+                                <span class="badge badge-success" id="result-status-badge"><i class="fa-solid fa-circle-check"></i> Analysis Complete</span>
+                                <h2 class="detected-disease" id="disease-name">--</h2>
+                                <p class="crop-info"><i class="fa-solid fa-tag"></i> Crop: <strong id="crop-name">--</strong> &bull; Condition: <strong id="condition-name">--</strong></p>
+                            </div>
+                            <div class="confidence-box">
+                                <div class="confidence-circle" id="confidence-circle">
+                                    <span class="confidence-num" id="confidence-val">0%</span>
+                                </div>
+                                <span class="confidence-label">AI Confidence</span>
+                            </div>
+                        </div>
+
+                        <!-- Top 3 Probability Breakdown -->
+                        <div class="ranking-section">
+                            <h4><i class="fa-solid fa-chart-column text-green"></i> Model Probability Distribution</h4>
+                            <div class="prediction-bars" id="prediction-bars"></div>
+                        </div>
+
+                        <!-- Organic Treatment & Recommendation Card -->
+                        <div class="treatment-box">
+                            <div class="treatment-header">
+                                <div class="treatment-title-group">
+                                    <span class="sub-badge"><i class="fa-solid fa-seedling"></i> Verified Recommendation</span>
+                                    <h3 id="organic-rec-title">Organic Solution</h3>
+                                </div>
+                                <span class="issue-badge" id="issue-type-badge">Disease</span>
+                            </div>
+
+                            <div class="treatment-details-grid">
+                                <div class="detail-item full-width">
+                                    <label><i class="fa-solid fa-flask"></i> Organic Recommendation</label>
+                                    <p id="rec-solution" class="highlight-text">--</p>
+                                </div>
+
+                                <div class="detail-item">
+                                    <label><i class="fa-solid fa-atom"></i> Active Ingredients / Bio-Agents</label>
+                                    <p id="rec-active-ingredients">--</p>
+                                </div>
+
+                                <div class="detail-item">
+                                    <label><i class="fa-solid fa-prescription-bottle"></i> Dosage</label>
+                                    <p id="rec-dosage">--</p>
+                                </div>
+
+                                <div class="detail-item">
+                                    <label><i class="fa-solid fa-clock-rotate-left"></i> Application Frequency</label>
+                                    <p id="rec-frequency">--</p>
+                                </div>
+
+                                <div class="detail-item">
+                                    <label><i class="fa-solid fa-certificate"></i> Validation Status</label>
+                                    <p id="rec-validation">--</p>
+                                </div>
+
+                                <div class="detail-item full-width">
+                                    <label><i class="fa-solid fa-hand-holding-droplet"></i> Application Guidance</label>
+                                    <p id="rec-guidance">--</p>
+                                </div>
+
+                                <div class="detail-item full-width">
+                                    <label><i class="fa-solid fa-shield-virus"></i> Integrated Prevention & Cultural Care</label>
+                                    <p id="rec-prevention">--</p>
+                                </div>
+
+                                <div class="detail-item full-width">
+                                    <label><i class="fa-solid fa-triangle-exclamation text-amber"></i> Safety Precautions & PPE</label>
+                                    <p id="rec-safety">--</p>
+                                </div>
+                            </div>
+
+                            <!-- Regulatory Disclaimer Notice -->
+                            <div class="disclaimer-banner">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <span id="rec-disclaimer">
+                                    DISCLAIMER: Recommendations must be checked against local agricultural guidance and the product label before application. Do not use unapproved chemicals or unverified generic dosages.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: ORGANIC RECOMMENDATIONS BROWSER -->
+    <section class="section recommendations-section" id="recommendations">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="subheading">Knowledge Repository</span>
+                <h2 class="section-title">Organic Pesticide & Treatment Catalog</h2>
+                <p class="section-subtitle">Search verified organic remedies, bio-pesticides, and IPM practices directly from our agricultural database.</p>
+            </div>
+
+            <!-- Search Filters -->
+            <div class="search-panel">
+                <div class="search-grid">
+                    <div class="form-group">
+                        <label for="crop-filter"><i class="fa-solid fa-wheat-awn"></i> Filter by Crop</label>
+                        <select id="crop-filter" class="form-control">
+                            <option value="">All Crops</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-grow">
+                        <label for="disease-search"><i class="fa-solid fa-magnifying-glass"></i> Search Disease or Pest</label>
+                        <input type="text" id="disease-search" class="form-control" placeholder="e.g., Early blight, Aphids, Scab, Rust...">
+                    </div>
+                    <div class="form-group-btn">
+                        <button type="button" class="btn btn-primary" id="search-btn">
+                            <i class="fa-solid fa-filter"></i> Search
+                        </button>
+                        <button type="button" class="btn btn-outline" id="reset-btn">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Catalog Cards Container -->
+            <div class="catalog-grid" id="catalog-grid">
+                <div class="loading-catalog text-center">
+                    <div class="spinner"></div>
+                    <p>Loading organic recommendations...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: ABOUT THE PROJECT -->
+    <section class="section about-section" id="about">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="subheading">Methodology & Ethics</span>
+                <h2 class="section-title">About the Prakritik Project</h2>
+                <p class="section-subtitle">Bridging cutting-edge edge AI with sustainable, chemical-free organic agriculture.</p>
+            </div>
+
+            <div class="about-grid">
+                <div class="card about-card">
+                    <div class="about-icon"><i class="fa-solid fa-network-wired"></i></div>
+                    <h3>MobileNetV2 Architecture</h3>
+                    <p>
+                        We employ a deep inverted residual MobileNetV2 network pretrained on ImageNet and fine-tuned on the 54,305-image PlantVillage dataset. The model balances lightweight CPU inference efficiency with high multi-class diagnostic precision across 38 distinct crop conditions.
+                    </p>
+                </div>
+
+                <div class="card about-card">
+                    <div class="about-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <h3>Why Pure Organic Farming?</h3>
+                    <p>
+                        Excessive chemical pesticides degrade the soil microbiome, contaminate groundwater tables, and trigger pesticide resistance. Our platform exclusively serves verified bio-control agents (e.g. <em>Trichoderma</em>, <em>Bacillus</em>, <em>Bt</em>) and cultural sanitation practices.
+                    </p>
+                </div>
+
+                <div class="card about-card">
+                    <div class="about-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+                    <h3>Extension & Label Compliance</h3>
+                    <p>
+                        Every recommendation is checked against agricultural guidelines (ICAR / State Agricultural Universities). Generic unverified chemical doses are never invented; farmers are always guided to check certified commercial product labels.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Prakritik AI Logo">
+                    <span>Prakritik AI</span>
+                </div>
+                <p>Digital Agricultural Diagnostic and Verified Organic Management Platform.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#detection">Disease Detection</a>
+                <a href="#recommendations">Organic Catalog</a>
+                <a href="#about">About</a>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p>&copy; 2026 Prakritik AI &bull; Advancing Sustainable Agriculture Through Ethical AI.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

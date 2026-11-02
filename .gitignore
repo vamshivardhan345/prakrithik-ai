@@ -1,0 +1,27 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Datasets (model is already saved in model/best_plant_model.keras)
+dataset/
+*.zip
+
+# Temporary user uploads
+static/uploads/upload_*
+
+# Environment variables
+.env
+
+# IDE / System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

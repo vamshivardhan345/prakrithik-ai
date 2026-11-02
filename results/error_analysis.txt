@@ -1,0 +1,48 @@
+IDENTIFICATION OF CLASSES WITH POOR PREDICTION PERFORMANCE
+===========================================================================
+
+Top 5 Lowest Performing Classes (by F1-score):
+---------------------------------------------------------------------------
+- Class: Tomato___Early_blight
+  F1-Score: 0.5768 | Support: 150.0 samples
+  Commonly misclassified as:
+    * Tomato___Bacterial_spot: 27 occurrences
+    * Tomato___Target_Spot: 15 occurrences
+    * Tomato___Late_blight: 8 occurrences
+
+- Class: Tomato___Septoria_leaf_spot
+  F1-Score: 0.6364 | Support: 267.0 samples
+  Commonly misclassified as:
+    * Tomato___Bacterial_spot: 57 occurrences
+    * Tomato___Early_blight: 19 occurrences
+    * Tomato___Target_Spot: 17 occurrences
+
+- Class: Tomato___Target_Spot
+  F1-Score: 0.7012 | Support: 212.0 samples
+  Commonly misclassified as:
+    * Tomato___Bacterial_spot: 21 occurrences
+    * Tomato___Spider_mites Two-spotted_spider_mite: 15 occurrences
+    * Tomato___healthy: 13 occurrences
+
+- Class: Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot
+  F1-Score: 0.7403 | Support: 78.0 samples
+  Commonly misclassified as:
+    * Corn_(maize)___Northern_Leaf_Blight: 20 occurrences
+    * Corn_(maize)___Common_rust_: 1 occurrences
+
+- Class: Potato___healthy
+  F1-Score: 0.7619 | Support: 24.0 samples
+  Commonly misclassified as:
+    * Soybean___healthy: 7 occurrences
+    * Tomato___healthy: 1 occurrences
+
+===========================================================================
+INVESTIGATION OF ROOT CAUSES:
+1. High Visual and Morphological Similarity:
+   - Diseases like Tomato Early Blight and Tomato Target Spot produce very similar brown necrotic spots with concentric halos on foliage.
+   - Corn Cercospora Leaf Spot and Corn Northern Leaf Blight both produce elongated grey-to-brown lesions on maize foliage that overlap in early stages.
+2. Class Imbalance:
+   - Some classes (e.g. Potato healthy, Tomato mosaic virus) have only 150-370 samples, compared to over 5,000 for Orange Huanglongbing or Soybean healthy.
+   - Despite stratified splitting, smaller minority classes have fewer gradient signals during training.
+3. Pre-harvest and Background Variance:
+   - Subtle color variations due to illumination or camera sensor differences in laboratory conditions occasionally affect fine-grained symptom differentiation.
