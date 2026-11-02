@@ -109,3 +109,37 @@ Run the full system test suite covering predictions, organic recommendation look
 ```bash
 python test_system.py
 ```
+
+---
+
+## 🌐 Cloud Deployment Guide
+
+The project is fully pre-configured for one-click cloud deployment on **Render**, **Railway**, or any Docker-compatible hosting.
+
+### Option A: Deploy to Render (Recommended Free Tier)
+1. Push your repository to GitHub:
+   ```bash
+   git remote add origin https://github.com/<your-username>/prakritik-plant-ai.git
+   git branch -M main
+   git push -u origin main
+   ```
+2. Log in to [Render Dashboard](https://dashboard.render.com/).
+3. Click **New +** > **Blueprint** (or **Web Service**).
+4. Connect your `prakritik-plant-ai` GitHub repository.
+5. Render detects `render.yaml` or `Procfile` automatically.
+6. Click **Apply** or **Create Web Service**. Your app will be live in 2-3 minutes with free SSL!
+
+### Option B: Deploy to Railway
+1. Push your code to GitHub (as above).
+2. Go to [Railway.app](https://railway.app/).
+3. Click **New Project** > **Deploy from GitHub repo** > Select `prakritik-plant-ai`.
+4. Railway automatically detects `Dockerfile` and builds the production container.
+5. Go to **Settings** > **Generate Domain** to get your public `https://*.up.railway.app` URL.
+
+### Option C: Run with Docker Locally
+```bash
+docker build -t prakritik-plant-ai .
+docker run -p 5000:5000 prakritik-plant-ai
+```
+Navigate to `http://localhost:5000`.
+
